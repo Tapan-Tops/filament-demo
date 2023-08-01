@@ -9,7 +9,17 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+// use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Table;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\DatePicker;
+
+
+
+
+
 
 class CustomerResource extends Resource
 {
@@ -81,10 +91,31 @@ class CustomerResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Filter::make('active')
+                ->query(fn (Builder $query) => $query->where('active', true)),
+                SelectFilter::make('country')
+                ->options([
+                    'Switzerland' => 'Switzerland',
+                    'Bangladesh' => 'Bangladesh',
+                    'Peru' => 'Peru',
+                ]),
+                SelectFilter::make('city')
+                ->options([
+                    'Switzerland' => 'Switzerland',
+                    'Bangladesh' => 'Bangladesh',
+                    'Peru' => 'Peru',
+                ]),
+                SelectFilter::make('state')
+                ->options([
+                    'Switzerland' => 'Switzerland',
+                    'Bangladesh' => 'Bangladesh',
+                    'Peru' => 'Peru',
+                ]),
             ])
+            //  layout: FiltersLayout::AboveContent            
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -110,5 +141,5 @@ class CustomerResource extends Resource
             'create' => Pages\CreateCustomer::route('/create'),
             'edit' => Pages\EditCustomer::route('/{record}/edit'),
         ];
-    }
+    }       
 }
